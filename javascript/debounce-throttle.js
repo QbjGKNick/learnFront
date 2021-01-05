@@ -12,10 +12,10 @@
  *         详细：假设我们规定的频率是500ms，我们操作了10min，触发的次数=(10*60*1000)/500
  */
 
-const button = document.getElementById("submit");
+const button = document.getElementById('submit')
 button.onclick = function () {
-    console.log("ok");
-};
+  console.log('ok')
+}
 /*// 页面场景中处理的技巧1：标识判断
 let flag = false;
 button.onclick = function () {
@@ -44,83 +44,83 @@ button.onclick = handle;
 */
 
 function debounce(func, wait, immediate) {
-    // 多个参数及传递和不传递的默认值处理
-    if (typeof func !== "funciton")
-        throw new TypeError("func must be an function!");
-    if (typeof wait === "undefined") wait = 500;
-    if (typeof wait === "boolean") {
-        immediate = wait;
-        wait = 500;
-    }
-    if (typeof immediate !== "boolean") immediate = false;
-    // 设定定时器返回值标识
-    /**
-     * 定时器的目的，检测500ms内是否会触发第二次，如果有，则为高频触发
-     * 第一次proxy执行，设置一个定时器
-     * 4ms
-     * 第二次proxy执行 清除之前设定的，重新设定，再去检测500ms内是否有第二次触发
-     * ...
-     * 疯狂点击100次，之前99次定时器都清除了，只留最后一个，等到过了500ms 发现没有触发第二次 则执行函数
-     */
-    let timer = null;
+  // 多个参数及传递和不传递的默认值处理
+  if (typeof func !== 'function')
+    throw new TypeError('func must be an function!')
+  if (typeof wait === 'undefined') wait = 500
+  if (typeof wait === 'boolean') {
+    immediate = wait
+    wait = 500
+  }
+  if (typeof immediate !== 'boolean') immediate = false
+  // 设定定时器返回值标识
+  /**
+   * 定时器的目的，检测500ms内是否会触发第二次，如果有，则为高频触发
+   * 第一次proxy执行，设置一个定时器
+   * 4ms
+   * 第二次proxy执行 清除之前设定的，重新设定，再去检测500ms内是否有第二次触发
+   * ...
+   * 疯狂点击100次，之前99次定时器都清除了，只留最后一个，等到过了500ms 发现没有触发第二次 则执行函数
+   */
+  let timer = null
 
-    return function proxy(...params) {
-        let self = this,
-            now = immediate && !timer;
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            timer = null;
-            !immediate ? func.call(self, ...params) : null;
-        }, wait);
+  return function proxy(...params) {
+    let self = this,
+      now = immediate && !timer
+    clearTimeout(timer)
+    timer = setTimeout(function () {
+      timer = null
+      !immediate ? func.call(self, ...params) : null
+    }, wait)
 
-        // 第一次触发就立即执行
-        now ? func.call(self, ...params) : null;
-    };
+    // 第一次触发就立即执行
+    now ? func.call(self, ...params) : null
+  }
 }
 
 function handle(ev) {
-    // 具体在点击的时候要处理的业务
-    console.log("ok", this, ev);
+  // 具体在点击的时候要处理的业务
+  console.log('ok', this, ev)
 }
 
-button.onclick = debounce(handle, true);
+button.onclick = debounce(handle, true)
 // button.onclick = debounce(handle, 500, true);
 // button.onclick=proxy; // 疯狂点击的情况下，proxy会被疯狂执行，我们需要在proxy中根据频率管控handle的执行次数
 
 function throttle(func, wait) {
-    if (typeof func !== "function")
-        throw new TypeError("func must be an function!");
-    if (typeof wait === "undefined") wait = 500;
+  if (typeof func !== 'function')
+    throw new TypeError('func must be an function!')
+  if (typeof wait === 'undefined') wait = 500
 
-    let timer = null,
-        previous = 0; // 记录上一次操作的时间
-    return function proxy(...params) {
-        let self = this,
-            now = new Date(), // 当前这次触发操作的时间
-            remaining = wait - (now - previous);
-        if (remaining <= 0) {
-            // 两次间隔时间超过wait了，直接执行即可
-            clearTimeout(timer);
-            timer = null;
-            previous = now;
-            func.call(self, ...params);
-        } else if (!timer) {
-            // 两次触发间隔时间没有超过wait，则设置定时器，让其等待remaining这么久之后执行一次「前提：没有设置过定时器」
-            timer = setTImeout(function () {
-                clearTimeout(timer);
-                timer = null;
-                previous = new Date();
-                func.call(self, ...params);
-            }, remaining);
-        }
-    };
+  let timer = null,
+    previous = 0 // 记录上一次操作的时间
+  return function proxy(...params) {
+    let self = this,
+      now = new Date(), // 当前这次触发操作的时间
+      remaining = wait - (now - previous)
+    if (remaining <= 0) {
+      // 两次间隔时间超过wait了，直接执行即可
+      clearTimeout(timer)
+      timer = null
+      previous = now
+      func.call(self, ...params)
+    } else if (!timer) {
+      // 两次触发间隔时间没有超过wait，则设置定时器，让其等待remaining这么久之后执行一次「前提：没有设置过定时器」
+      timer = setTImeout(function () {
+        clearTimeout(timer)
+        timer = null
+        previous = new Date()
+        func.call(self, ...params)
+      }, remaining)
+    }
+  }
 }
 
 function handle() {
-    console.log("ok");
+  console.log('ok')
 }
 
-window.onscroll = throttle(handle);
+window.onscroll = throttle(handle)
 
 // window.onscroll = function () {
 //     // 默认情况下，页面滚动中：浏览器在最快的反应时间内（4~6ms）,就会识别监听一次事件绑定，
