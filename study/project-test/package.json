@@ -1,0 +1,66 @@
+{
+    "name": "@cci/template-project-ant",
+    "author": "hufei",
+    "version": "1.0.0",
+    "description": "An awesome project",
+    "scripts": {
+        "serve": "vue-cli-service serve --open",
+        "dev": "vue-cli-service serve --open",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
+    },
+    "dependencies": {
+        "@cci/ccli-plugin-addtable": "1.0.4",
+        "@cci/cp-button-list": "^1.0.10",
+        "@cci/cp-form": "^1.0.11",
+        "@cci/cp-layout": "^1.2.0",
+        "@cci/cp-qrcode": "^1.1.14",
+        "@cci/cp-search-form": "^1.0.10",
+        "@cci/cp-select-time": "^1.0.6",
+        "@cci/cp-select-tree": "^1.0.3",
+        "@cci/cp-svg-icon": "^1.0.3",
+        "@cci/cp-wrap-table": "^1.1.20",
+        "@cci/cui": "^1.3.6",
+        "@cci/lib-store": "^1.0.4",
+        "axios": "^0.19.0",
+        "vue": "^2.6.10",
+        "vue-router": "^3.1.3"
+    },
+    "devDependencies": {
+        "@cci/vue-cli-plugin-babel": "^1.0.8",
+        "@vue/cli-plugin-eslint": "^4.1.0",
+        "@vue/cli-service": "^4.1.0",
+        "babel-eslint": "^10.0.3",
+        "core-js": "2",
+        "eslint": "^5.16.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "node-sass": "^4.14.1",
+        "sass-loader": "^10.0.1",
+        "svg-sprite-loader": "^4.1.6",
+        "vue-template-compiler": "^2.6.10"
+    },
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {
+            "no-console": "off"
+        },
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
+    ]
+}
