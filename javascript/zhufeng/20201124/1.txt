@@ -1,0 +1,12 @@
+setTimeout(() => {
+    console.log(1);
+}, 0);
+console.log(2);
+while (1) {
+    // do somthing
+}
+console.log(3);
+setTimeout(() => {
+    console.log(4);
+}, 10);
+console.log(5);
