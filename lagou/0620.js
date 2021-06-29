@@ -1,39 +1,40 @@
 // 题目一：
 // 存在一个request(option, callback)函数用来进行ajax请求
-// 请使用 Promise 实现一个retry(option, callback, count)函数。
-async function request(option, callback) {
-  try {
-    const result = await axios(option)
-    callback(true, result)
-  } catch (error) {
-    callback(false, error)
-  }
+// 请使用 Promise 实现一个retry(option, count)函数。
+function _request(option) {
+  return new Promise((resolve, reject) => {
+    request(option, (err, data) => {
+      if (err) reject(err)
+      else resolve(data)
+    })
+  })
 }
 
 function retry(option, count) {
-  return new Promise((resolve, reject) => {
-    let limitNum = 0
-    const start = async () => {
-      try {
-        await request(option, (err, data) => {
-          if (err === true) {
-            resolve(data)
-          } else {
-            reject(err)
-          }
-        })
-      } catch (error) {
-        limitNum++
-        if (limitNum <= count) {
-          start()
-        } else {
-          reject(error)
-        }
+  let promise = Promise.resolve()
+  let isStoped = false
+  for (let i=0;i<count;i++) {
+    promise = promise
+    .then((data) => {
+      if (isStoped) {
+        return Promise.resolve(data)
       }
-    }
-    start()
-  })
+      return _request(option)
+    })
+    .then((data) => {
+      if (!isStoped) {
+        isStoped = true
+      }
+      return Promise.resolve(data)
+    })
+    .catch(err => {
+      if(i>= count) {
+        return Promise.reject(err)
+      }
+    })
+  }
 }
+
 
 // 题目二：
 // 全局有一个方法function ajax(url, option)，其返回一个Promise

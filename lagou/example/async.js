@@ -1,0 +1,1 @@
+// 存在一个request函数用来进行ajax请求，请实现一个retry(option, count)函数
