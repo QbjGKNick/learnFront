@@ -20,6 +20,23 @@ var B = function (window, noGlobal) {
         // ...
     };
 
+    jQuery.noConfict = function (deep) {
+        if(window.$ === jQuery) {
+            window.$=_$
+        }
+        if (deep && window.jQuery===jQuery) {
+            window.jQuery = _jQuery
+        }
+        return jQuery
+    }
+
+    // 支持AMD模块化思想 require.js
+    if (typeof define === 'function' && define.cmd) {
+        define('jQuery', [], function () {
+            return jQuery
+        })
+    }
+
     // 浏览器环境下
     if (typeof noGlobal === "undefined") {
         // 把私有的方法暴露到全局对象上
@@ -47,7 +64,16 @@ var B = function (window, noGlobal) {
         // ...
     }
 
-    // 暴露API：支持浏览器 && CommonJS
+    // 防止冲突处理
+    var _M = window.M
+    ModalPlugin.noConfict = function noConfict() {
+        if (window.M === ModalPlugin) {
+            window.M = _M
+        }
+        return ModalPlugin
+    }
+
+    // 暴露API：支持浏览器[直接SCRIPT导入] && CommonJS[支持在webpack中或者ES6Module导入]
     if (typeof window !== "undefined") {
         window.M = window.ModalPlugin = ModalPlugin;
     }
