@@ -119,3 +119,35 @@ total = sum(10, 20)
 console.log(total) // 30
 total = sum(10, 20, 30)
 console.log(total) // 60
+
+/**
+ * 重写内置的CALL：把需要执行的函数和需要改变的THIS关联在一起
+ *  + context.xxx=this  obj.fn=fn
+ *  + context.xxx()   obj.fn()
+ */
+Function.prototype.call = function call(context, ...params) {
+  // this -> fn context-> obj params -> [10,20]
+  // 1.判断context是否传递
+  context == null ? context = window : null
+  // 2.如果传递了，则context必须是对象
+  !/^(object|function)/.test(context) ? context = Object(context) : null
+
+  let self = this, result = null,
+      key = Symbol('key'); // 新增的属性名称保持唯一性，防止污染了原始对象中的成员
+  context[key] = self
+  result = context[key](...params)
+  delete context[key] // 用完后移除自己新增的属性
+  return result
+}
+
+/**
+ * 重写内置BIND：柯里化思想【预处理思想】
+ */
+Function.prototype.bind = function bind(context, ...outerArgs) {
+  // this->fn context->obj outerArgs->[10,20]
+  let self = this
+  return function (...innerArgs) {
+    // innerArgs->[ev]
+    self.call(context, ...outerArgs.concat(innerArgs))
+  }
+}
