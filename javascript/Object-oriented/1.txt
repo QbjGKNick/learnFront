@@ -18,3 +18,4 @@ fun.prototype = {
 var my_fun = new fun()
 my_fun.b()
 my_fun.c()
+
