@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="./utils.js"></script>
+    <script src="../jquery-3.5.1.js"></script>
+    <script>
+        let obj1 = {
+            name: 'name1',
+            teacher: {
+                0: 'teacher1',
+                1: 'teacher2'
+            },
+            price: 100
+        }
+        let obj2 = {
+            name: 'name2',
+            teacher: {
+                2: 'teacher3'
+            },
+            to: 'others'
+        }
+
+        // let obj = Object.assign(obj1, obj2) // 浅合并
+        // $.extend(obj1, obj2) // 浅合并
+        // $.extend(true, obj1, obj2) // 深合并
+        // console.log(obj1);
+        // let obj = _.shallowMerge(obj1, obj2)
+        let obj = _.deepMerge(obj1, obj2)
+        console.log(obj);
+    </script>
+</body>
+</html>

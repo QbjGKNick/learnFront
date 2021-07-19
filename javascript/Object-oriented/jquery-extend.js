@@ -21,6 +21,21 @@ $.fn.extend({
 
 $('body').BBB() */
 
+/* jQuery.extend = jQuery.fn.extend = function (obj) {
+  if (obj == null || typeof obj !== 'object') throw new TypeError('obj must be an object!')
+  var self = this,
+      keys = Object.keys(obj)
+  typeof Symbol !== 'undefined' ? keys = keys.concat(Object.getOwnPropertySymbols(obj)) : null
+  keys.forEach(function (key) {
+    self[key] = obj[key]
+  })
+  return self
+}
+ */
+
+// JQ中的extend还有一个功能：基于浅比较和深比较，实现对象的合并
+//    + $.extend(obj1, obj2) 浅合并：obj2替换obj1，最后返回obj1   类似于：Object.assign
+//    + $.extend(true, obj1, obj2) 深合并：obj2替换obj1，最后返回的是obj1
 jQuery.extend = jQuery.fn.extend = function () {
   var options,
     name,

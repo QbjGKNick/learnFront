@@ -149,6 +149,75 @@
     return (type === 'number' || type === 'string') && !isNaN(+obj)
   }
 
+  var each = function each(obj, callback) {
+    var length, i = 0
+    // isArrayLike:检测是否为数组或者类数组
+    if (isArrayLike(obj)) {
+        length = obj.length
+        for (; i < length; i++) {
+            // 每一轮循环都去执行回调函数
+            //      + 传递实参：索引/当前项
+            //      + 改变THIS：当前项
+            //      + 接收返回值：如果回调函数返回false，则结束循环
+            var result = callback.call(obj[i], i, obj[i])
+            if (result === false) {
+                break
+            }
+        }
+    } else {
+        /* // 对象
+        for (i in obj) {
+            // for in遍历问题
+            //      + 1.遍历到原型上自己扩展的公共的属性
+            //      + 2.顺序
+            //      + 3.无法找到symbol的属性
+            if (callback.call(obj[i], i, obj[i] === false)) {
+                break
+            }
+        } */
+        var keys = Object.getOwnPropertyNames(obj)
+        typeof Symbol !== 'undefined' ? keys = keys.concat(Object.getOwnPropertySymbols(obj)) : null
+        for (; i < keys.length; i++) {
+            var key = keys[i]
+            var result = callback.call(obj[key], key, obj[key])
+            if (result === false) {
+                break
+            }
+        }
+    }
+
+    return obj
+  }
+
+  /* 对象的深浅合并
+   *  [合并的规律]
+   *    A->obj1 B->obj2
+   *    A/B都是对象：迭代B，依次替换A
+   *    A不是对象，B是对象：B替换A
+   *    A是对象，B不是对象：依然以A的值为主
+   *    A/B都不是对象，B替换A
+   */
+  var shallowMerge = function shallowMerge(obj1, obj2) {
+    var isPlain1 = isPlainObject(obj1),
+        isPlain2 = isPlainObject(obj2)
+    if (!isPlain1) return obj2
+    if (!isPlain2) return obj1
+    each(obj2, function (key, value) {
+      obj1[key] = value
+    })
+    return obj1
+  }
+
+  var deepMerge = function deepMerge(obj1, obj2) {
+    var isPlain1 = isPlainObject(obj1),
+        isPlain2 = isPlainObject(obj2)
+    if (!isPlain1 || !isPlain2) return shallowMerge(obj1, obj2)
+    each(obj2, function (key, value) {
+      obj1[key] = deepMerge(obj1[key], value)
+    })
+    return obj1
+  }
+
   var utils = {
     toType: toType,
     isFunction: isFunction,
@@ -156,7 +225,10 @@
     isArrayLike: isArrayLike,
     isPlainObject: isPlainObject,
     isEmptyObject: isEmptyObject,
-    isNumberic: isNumberic
+    isNumberic: isNumberic,
+    each: each,
+    shallowMerge: shallowMerge,
+    deepMerge: deepMerge
   }
 
   // 暴露到外部
