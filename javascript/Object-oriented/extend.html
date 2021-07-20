@@ -1,38 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 </head>
+
 <body>
     <script src="./utils.js"></script>
     <script src="../jquery-3.5.1.js"></script>
     <script>
-        let obj1 = {
-            name: 'name1',
-            teacher: {
-                0: 'teacher1',
-                1: 'teacher2'
+        /* let obj1 = {
+                 name: 'name1',
+                 teacher: {
+                     0: 'teacher1',
+                     1: 'teacher2'
+                 },
+                 price: 100
+             }
+             obj1.A = obj1
+             let obj2 = {
+                 name: 'name2',
+                 teacher: {
+                     2: 'teacher3'
+                 },
+                 to: 'others'
+             }
+             obj2.A = obj2
+     
+             // let obj = Object.assign(obj1, obj2) // 浅合并
+             // $.extend(obj1, obj2) // 浅合并
+             // $.extend(true, obj1, obj2) // 深合并
+             // console.log(obj1);
+             // let obj = _.shallowMerge(obj1, obj2)
+             let obj = _.deepMerge(obj1, obj2)
+             console.log(obj); */
+
+        let obj = {
+            a: 100,
+            b: [10, 20, 30],
+            c: {
+                x: 10,
             },
-            price: 100
-        }
-        let obj2 = {
-            name: 'name2',
-            teacher: {
-                2: 'teacher3'
-            },
-            to: 'others'
+            d: /^\d+$/,
+            fn: function () {},
+            time: new Date,
+            xx: Symbol(),
+            0: null,
+            1: undefined
         }
 
-        // let obj = Object.assign(obj1, obj2) // 浅合并
-        // $.extend(obj1, obj2) // 浅合并
-        // $.extend(true, obj1, obj2) // 深合并
-        // console.log(obj1);
-        // let obj = _.shallowMerge(obj1, obj2)
-        let obj = _.deepMerge(obj1, obj2)
-        console.log(obj);
+        let arr = [
+            10,
+            [100, 200],
+            {
+                x: 10,
+                y: 20,
+            },
+        ]
+
+        // 深克隆 JSON.parse/stringify
+        //  + 转换为字符串的时候，不是所有的值都支持
+        //  + 正则变空对象
+        //  + BigInt处理不了，会报错
+        //  + 属性值为undefined或者函数的都会消失
+        //  + 日起对象变为字符串后转换不回来了
+        //  + ArrayBuffer...
+        let obj2 = JSON.parse(JSON.stringify(obj))
+
+        // 对象/数组克隆【浅克隆】
+        // + ...
+        // + 迭代
+        // + 内置方法 例如：slice
+
+        let obj2 = { ...obj }
+
+        let obj2 = {}
+        _.each(obj, function(key, value) {
+            obj2[key] = value
+        })
     </script>
 </body>
+
 </html>

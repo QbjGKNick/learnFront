@@ -208,14 +208,54 @@
     return obj1
   }
 
-  var deepMerge = function deepMerge(obj1, obj2) {
+  var deepMerge = function deepMerge(obj1, obj2, cache) {
+    // 防止对象的循环嵌套导致的死递归问题
+    !Array.isArray(cache) ? cache = [] : null
+    if (cache.indexOf(obj2) >= 0) return obj2
+    cache.push(obj2)
+    
+    // 正常处理
     var isPlain1 = isPlainObject(obj1),
         isPlain2 = isPlainObject(obj2)
     if (!isPlain1 || !isPlain2) return shallowMerge(obj1, obj2)
     each(obj2, function (key, value) {
-      obj1[key] = deepMerge(obj1[key], value)
+      obj1[key] = deepMerge(obj1[key], value, cache)
     })
     return obj1
+  }
+
+  /**
+   * 对象或者数组的深浅克隆
+   */
+  var shallowClone = function shallowClone(obj) {
+    var type = toType(obj),
+        Ctor = null
+    // 其他特殊值的处理
+    if (obj == null) return obj
+    Ctor = obj.constructor
+    if (/^(regexp|date)$/i.test(type)) return new Ctor(obj)
+    // if (type === "regexp") return new RegExp(obj)
+    // if (type === 'date') return new Date(obj)
+    if (/^(symbol|bigint)$/i.test(obj)) return Object(obj)
+    if (/^error$/i.test(type)) return new Ctor(obj.message)
+    if (/^function$/i.test(type)) {
+      return function anonymous() {
+        return obj.apply(this, arguments)
+      }
+    }
+    // 数组和纯粹对象，我们基于循环的方案来处理
+    if (isPlainObject(obj) || type === 'array') {
+      var result = new Ctor()
+      each(obj, funciton (key, value) {
+        result[key] = value
+      })
+      return result
+    }
+    return obj
+  }
+
+  var deepClone = function deepClone(obj) {
+
   }
 
   var utils = {
@@ -228,7 +268,9 @@
     isNumberic: isNumberic,
     each: each,
     shallowMerge: shallowMerge,
-    deepMerge: deepMerge
+    deepMerge: deepMerge,
+    shallowClone: shallowClone,
+    deepClone: deepClone
   }
 
   // 暴露到外部
