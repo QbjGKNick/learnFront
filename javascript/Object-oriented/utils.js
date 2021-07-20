@@ -254,8 +254,23 @@
     return obj
   }
 
-  var deepClone = function deepClone(obj) {
-
+  var deepClone = function deepClone(obj, cache) {
+    var type = toType(obj),
+        Ctor = null,
+        result = null
+    
+    if (!isPlainObject(obj) && type !== "array") return shallowClone(obj)
+    // 防止死递归
+    cache = !Array.isArray(cache) ? [] : cache
+    if (cache.indexOf(obj) >= 0) return obj
+    cache.push(obj)
+    // 正常的迭代处理
+    Ctor = obj.constructor
+    result = new Ctor()
+    each(obj, function(key, value) {
+      result[key] = deepClone(value, cache)
+    })
+    return result
   }
 
   var utils = {
