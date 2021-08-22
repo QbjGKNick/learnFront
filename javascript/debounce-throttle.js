@@ -106,7 +106,7 @@ function throttle(func, wait) {
       func.call(self, ...params)
     } else if (!timer) {
       // 两次触发间隔时间没有超过wait，则设置定时器，让其等待remaining这么久之后执行一次「前提：没有设置过定时器」
-      timer = setTImeout(function () {
+      timer = setTimeout(function () {
         clearTimeout(timer)
         timer = null
         previous = new Date()
