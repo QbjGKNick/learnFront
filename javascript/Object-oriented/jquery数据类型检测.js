@@ -55,13 +55,13 @@ console.log(toString.call(function () {})) // "[object Function]"
 console.log(Object.prototype.toString(fn)) */
 
 let arr = []
-console.log(Array.isArray(arr)); ..
+console.log(Array.isArray(arr));
 console.log(Object.prototype.toString.call(arr) // true
-console.log(/array/i.test/Object.prototype.toString.call(arr)) // true                                                                                                                                                                                                         );
+console.log(/array/i.test(Object.prototype.toString.call(arr))) // true                                                                                                                                                                                                         );
   
   
 /* function Fn() {}
-Fn.prototype[Symbol.toStringTag] = 'Fn'
+Fn.prototype[Symbol.to] = 'Fn'
 let f = new Fn()
 console.log(Object.prototype.toString.call(f)) // "[object Fn]" */
 
