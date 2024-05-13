@@ -15,3 +15,5 @@
   - undefined
 
   - Symbol
+
+  - Object
